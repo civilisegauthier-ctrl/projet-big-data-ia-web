@@ -1,22 +1,21 @@
 library(ggplot2)
 library(AER)
 library(dplyr)
-library(rgl)
 library(tidyverse)
 library(ggmap)
 library(magrittr)
 library(leaflet)
-library(ggplot2)
 library(maps)
 library(sf)
 
 
 #définir le répertoire de travail attention il faut \\ pour le chemin ou /
-setwd("C:\\Users\\ocean_n982y2l\\OneDrive\\Bureau\\études\\cipa4\\projet")
+setwd("/Users/gauthiercivilise/Documents/CIPA4/Projet_IA_WEB_DATA/projet-big-data-ia-web")
+
 getwd()
 
 
-data = read.csv2("Données_V3.csv",
+data = read.csv2("Données_V4.csv",
                  header = TRUE,
                  fileEncoding = "UTF-8",
                  stringsAsFactors = FALSE,

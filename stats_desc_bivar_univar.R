@@ -23,8 +23,222 @@ data = read.csv2("Données_V4.csv",
                  dec =',',
 ) #row.names = 1 pour transfo en index
 
-#temp 
-data= data%>% filter(data$age_estim<2000)
+
+############################################################
+# 1. DESCRIPTION GÉNÉRALE DU JEU DE DONNÉES
+############################################################
+
+# Nombre de lignes et de colonnes
+dim(data)
+
+# Structure des variables
+str(data)
+
+# Résumé global du dataset
+summary(data)
+
+# Nombre de valeurs manquantes par variable
+colSums(is.na(data))
+
+############################################################
+# 2. STATISTIQUES DESCRIPTIVES UNIVARIÉES
+############################################################
+
+
+# Variables quantitatives
+
+# Hauteur totale
+mean_haut <- mean(data$haut_tot, na.rm = TRUE)
+
+median_haut <- median(data$haut_tot, na.rm = TRUE)
+
+sd_haut <- sd(data$haut_tot, na.rm = TRUE)
+
+min_haut <- min(data$haut_tot, na.rm = TRUE)
+
+max_haut <- max(data$haut_tot, na.rm = TRUE)
+
+# Diamètre du tronc
+mean_diam <- mean(data$tronc_diam, na.rm = TRUE)
+
+median_diam <- median(data$tronc_diam, na.rm = TRUE)
+
+sd_diam <- sd(data$tronc_diam, na.rm = TRUE)
+
+min_diam <- min(data$tronc_diam, na.rm = TRUE)
+
+max_diam <- max(data$tronc_diam, na.rm = TRUE)
+
+# Âge estimé
+mean_age <- mean(data$age_estim, na.rm = TRUE)
+
+median_age <- median(data$age_estim, na.rm = TRUE)
+
+sd_age <- sd(data$age_estim, na.rm = TRUE)
+
+min_age <- min(data$age_estim, na.rm = TRUE)
+
+max_age <- max(data$age_estim, na.rm = TRUE)
+
+############################
+# Variables qualitatives
+############################
+
+# Répartition par état
+table_etat <- table(data$fk_arb_etat)
+
+prop_etat <- prop.table(table_etat) * 100
+
+# Répartition par type de feuillage
+table_feuillage <- table(data$feuillage)
+
+prop_feuillage <- prop.table(table_feuillage) * 100
+
+# Répartition arbres remarquables
+table_remarquable <- table(data$remarquable)
+
+prop_remarquable <- prop.table(table_remarquable) * 100
+
+###################################################
+# 3. STATISTIQUES DESCRIPTIVES BIVARIÉES
+###################################################
+
+# Quantitative / quantitative
+
+# Corrélation âge / hauteur
+cor_age_haut <- cor(
+  data$age_estim,
+  data$haut_tot,
+  use = "complete.obs"
+  )
+
+# Corrélation diamètre / hauteur
+cor_diam_haut <- cor(
+  data$tronc_diam,
+  data$haut_tot,
+  use = "complete.obs"
+)
+
+############################
+# Qualitative vs quantitative
+############################
+
+# Moyenne de hauteur par état
+
+mean_haut_par_etat <- aggregate(
+  haut_tot ~ fk_arb_etat,
+  data = data,
+  mean,
+  na.rm = TRUE
+)
+
+# Moyenne de hauteur selon remarquable
+
+mean_haut_remarquable <- aggregate(
+  haut_tot ~ remarquable,
+  data = data,
+  mean,
+  na.rm = TRUE
+)
+
+############################
+# Qualitative vs qualitative
+############################
+
+# Tableau croisé feuillage / état
+
+croise_feuillage_etat <- table(
+  data$feuillage,
+  data$fk_arb_etat
+)
+
+############################################################
+# 4. AFFICHAGE DES RÉSULTATS
+############################################################
+
+mean_haut
+
+median_haut
+
+sd_haut
+
+mean_diam
+
+median_diam
+
+sd_diam
+
+mean_age
+
+median_age
+
+sd_age
+
+table_etat
+
+prop_etat
+
+table_feuillage
+
+prop_feuillage
+
+table_remarquable
+
+prop_remarquable
+
+cor_age_haut
+
+cor_diam_haut
+
+mean_haut_par_etat
+
+mean_haut_remarquable
+
+croise_feuillage_etat
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ###########################
 # 1. DESCRIPTION GÉNÉRALE 
