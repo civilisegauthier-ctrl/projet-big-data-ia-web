@@ -9,10 +9,10 @@
 créer un dossier avec tout les fichiers nécessaires.
 
 # Etape 2 : 
-executer le fichier notebook_client1.ipynb.
+executer les commandes dans le fichier notebook_client1.ipynb dans l'ordre.
 
 # Etape 3 :
 récupérer le fichier "dataset_ajuste.csv" créé à l'aide du notebook et le placer dans le dossier avec tout les fichiers nécessaires.
 
 # Etape 4 :
-executer le fichier script_client1.py.
+executer le fichier script_client1.py dans l'ordre.
