@@ -2,8 +2,8 @@
 
 #listes des fichiers nécessaires :
   -README.md
-  -notebook_client1.ipynb
-  -script_client1.py
+  - besoin_client_1_notebook.ipynb
+  - besoin_client_1_script.py
   -DonnéesV5.csv
 ## Etape 1 :
 créer un dossier avec tout les fichiers nécessaires.
