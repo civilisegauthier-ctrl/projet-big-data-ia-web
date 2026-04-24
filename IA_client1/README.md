@@ -1,10 +1,10 @@
 ### Consignes d'execution des fichiers pour le client 1
 
 #listes des fichiers nécessaires :
-  -README.md
+  - README.md
   - besoin_client_1_notebook.ipynb
   - besoin_client_1_script.py
-  -DonnéesV5.csv
+  - DonnéesV5.csv
 ## Etape 1 :
 créer un dossier avec tout les fichiers nécessaires.
 
