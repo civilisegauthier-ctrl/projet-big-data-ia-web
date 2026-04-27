@@ -20,6 +20,7 @@ $currentPage = 'ajout';
             <nav class="main-nav">
                 <a href="index.php" class="<?php echo $currentPage === 'accueil' ? 'active' : ''; ?>">Accueil</a>
                 <a href="ajouter-arbre.php" class="<?php echo $currentPage === 'ajout' ? 'active' : ''; ?>">Ajouter un arbre</a>
+                <a href="visualiser-arbres.php" class="<?php echo $currentPage === 'visualisation' ? 'active' : ''; ?>">Voir les arbres</a>
             </nav>
         </div>
     </header>
@@ -30,7 +31,8 @@ $currentPage = 'ajout';
                 <p class="eyebrow">Fonctionnalite 2</p>
                 <h2>Ajouter un nouvel arbre</h2>
                 <p>
-                    Les listes du formulaire sont chargees depuis le fichier `Données_V4.csv`.
+                    Les listes du formulaire sont chargees depuis le fichier `Données_V4.csv`,
+                    car la base MySQL ne contient que les nouveaux arbres ajoutes via l'application.
                     L'age et le deracinement ne sont pas demandes, conformement aux consignes.
                 </p>
             </div>

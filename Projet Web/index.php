@@ -20,6 +20,7 @@ $currentPage = 'accueil';
             <nav class="main-nav">
                 <a href="index.php" class="<?php echo $currentPage === 'accueil' ? 'active' : ''; ?>">Accueil</a>
                 <a href="ajouter-arbre.php" class="<?php echo $currentPage === 'ajout' ? 'active' : ''; ?>">Ajouter un arbre</a>
+                <a href="visualiser-arbres.php" class="<?php echo $currentPage === 'visualisation' ? 'active' : ''; ?>">Voir les arbres</a>
             </nav>
         </div>
     </header>
@@ -60,8 +61,8 @@ $currentPage = 'accueil';
                 <article class="card">
                     <h3>Fonctionnalites visees</h3>
                     <p>
-                        Cette premiere version inclut une page d'accueil, un menu de navigation et un formulaire
-                        d'ajout d'arbre avec des choix issus du fichier de donnees fourni.
+                        Cette premiere version inclut une page d'accueil, un menu de navigation, un formulaire
+                        d'ajout d'arbre et un tableau pour visualiser les arbres enregistres en base.
                     </p>
                 </article>
 

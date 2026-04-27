@@ -1,6 +1,7 @@
 <?php
 
-function get_db_connection() {
+function get_db_connection()
+{
     $host = 'localhost';
     $db = 'patrimoine_arbore';
     $user = 'root';
@@ -8,11 +9,11 @@ function get_db_connection() {
     $charset = 'utf8mb4';
 
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-    $options = [
+    $options = array(
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
-    ];
+    );
 
     try {
         return new PDO($dsn, $user, $pass, $options);
@@ -41,7 +42,7 @@ function read_tree_data()
         return $rows;
     }
 
-    $headers = fgetcsv($handle, 0, ';');
+    $headers = fgetcsv($handle, 0, ';', '"', '\\');
 
     if ($headers === false) {
         fclose($handle);
@@ -52,7 +53,7 @@ function read_tree_data()
         $headers[0] = preg_replace('/^\xEF\xBB\xBF/', '', $headers[0]);
     }
 
-    while (($line = fgetcsv($handle, 0, ';')) !== false) {
+    while (($line = fgetcsv($handle, 0, ';', '"', '\\')) !== false) {
         if (count($line) !== count($headers)) {
             continue;
         }
@@ -93,6 +94,8 @@ function get_form_options()
 {
     $rows = read_tree_data();
 
+    // Les listes du formulaire viennent toujours du CSV.
+    // Cela permet d'avoir des choix disponibles meme si la base SQL est vide.
     return array(
         'especes' => get_unique_values($rows, 'nomfrancais'),
         'etats' => get_unique_values($rows, 'fk_arb_etat'),
@@ -103,23 +106,42 @@ function get_form_options()
     );
 }
 
-function get_storage_path()
-{
-    return dirname(__DIR__) . '/data/arbres_ajoutes.json';
-}
-
 function read_added_trees()
 {
     $pdo = get_db_connection();
     $stmt = $pdo->query("SELECT * FROM added_trees ORDER BY date_ajout DESC");
+
     return $stmt->fetchAll();
+}
+
+function read_trees_for_table()
+{
+    $trees = read_added_trees();
+
+    return $trees;
 }
 
 function save_added_tree($treeData)
 {
     $pdo = get_db_connection();
-    $stmt = $pdo->prepare("INSERT INTO added_trees (espece, hauteur_totale, hauteur_tronc, diametre_tronc, remarquable, latitude, longitude, etat, stade_developpement, type_port, type_pied, date_ajout) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-    $stmt->execute([
+
+    $sql = "INSERT INTO added_trees (
+                espece,
+                hauteur_totale,
+                hauteur_tronc,
+                diametre_tronc,
+                remarquable,
+                latitude,
+                longitude,
+                etat,
+                stade_developpement,
+                type_port,
+                type_pied,
+                date_ajout
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(array(
         $treeData['espece'],
         $treeData['hauteur_totale'],
         $treeData['hauteur_tronc'],
@@ -131,9 +153,11 @@ function save_added_tree($treeData)
         $treeData['stade_developpement'],
         $treeData['type_port'],
         $treeData['type_pied']
-    ]);
+    ));
+
     $treeData['id'] = $pdo->lastInsertId();
     $treeData['date_ajout'] = date('Y-m-d H:i:s');
+
     return $treeData;
 }
 

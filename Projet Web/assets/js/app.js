@@ -31,6 +31,17 @@ function showMessage(text, type) {
     box.className = 'message-box ' + type;
 }
 
+function showTableMessage(text, type) {
+    var box = document.getElementById('table-message');
+
+    if (!box) {
+        return;
+    }
+
+    box.textContent = text;
+    box.className = 'message-box ' + type;
+}
+
 function loadOptions() {
     fetch('api/options.php')
         .then(function (response) {
@@ -109,7 +120,78 @@ function registerForm() {
     });
 }
 
+function createTableCell(text) {
+    var cell = document.createElement('td');
+    cell.textContent = text;
+    return cell;
+}
+
+function renderTreeTable(trees) {
+    var tableBody = document.getElementById('tree-table-body');
+    var treeCount = document.getElementById('tree-count');
+
+    if (!tableBody || !treeCount) {
+        return;
+    }
+
+    tableBody.innerHTML = '';
+    treeCount.textContent = trees.length + ' arbre(s) enregistre(s)';
+
+    if (trees.length === 0) {
+        var emptyRow = document.createElement('tr');
+        var emptyCell = document.createElement('td');
+        emptyCell.colSpan = 11;
+        emptyCell.textContent = 'Aucun arbre n est encore enregistre dans la base.';
+        emptyRow.appendChild(emptyCell);
+        tableBody.appendChild(emptyRow);
+        return;
+    }
+
+    trees.forEach(function (tree) {
+        var row = document.createElement('tr');
+
+        row.appendChild(createTableCell(tree.espece));
+        row.appendChild(createTableCell(tree.hauteur_totale));
+        row.appendChild(createTableCell(tree.hauteur_tronc));
+        row.appendChild(createTableCell(tree.diametre_tronc));
+        row.appendChild(createTableCell(tree.remarquable));
+        row.appendChild(createTableCell(tree.latitude));
+        row.appendChild(createTableCell(tree.longitude));
+        row.appendChild(createTableCell(tree.etat));
+        row.appendChild(createTableCell(tree.stade_developpement));
+        row.appendChild(createTableCell(tree.type_port));
+        row.appendChild(createTableCell(tree.type_pied));
+
+        tableBody.appendChild(row);
+    });
+}
+
+function loadTrees() {
+    var tableBody = document.getElementById('tree-table-body');
+
+    if (!tableBody) {
+        return;
+    }
+
+    fetch('api/arbres.php')
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            if (!data.success) {
+                showTableMessage('Impossible de charger les arbres.', 'error');
+                return;
+            }
+
+            renderTreeTable(data.trees);
+        })
+        .catch(function () {
+            showTableMessage('Une erreur est survenue pendant le chargement du tableau.', 'error');
+        });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     loadOptions();
     registerForm();
+    loadTrees();
 });

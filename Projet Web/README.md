@@ -7,26 +7,29 @@ Cette proposition fournit une premiere version simple du site web pour le projet
 
 - Une page d'accueil chargee par defaut avec menu de navigation
 - Une page `Ajouter un arbre`
+- Une page `Voir les arbres`
 - Un formulaire qui demande uniquement les champs attendus
 - Un chargement des listes depuis `Données_V4.csv`
+- Un tableau qui affiche les arbres presents dans la base web
 - Des echanges AJAX entre le front-end et le back-end
 - Des reponses JSON cote PHP
 
 ## Important
 
-Pour le moment, il n'y a pas encore la vraie base MySQL ou PostgreSQL.
-En attendant vos scripts SQL, les nouvelles saisies sont stockees dans :
+Le fonctionnement retenu pour rester simple est le suivant :
 
-- `Projet Web/data/arbres_ajoutes.json`
-
-Le code a ete prepare pour etre facile a remplacer ensuite par des requetes SQL.
+- les listes du formulaire sont chargees depuis `Données_V4.csv`
+- seuls les nouveaux arbres ajoutes depuis l'application sont enregistres en base MySQL
+- les arbres historiques du CSV ne sont pas importes dans la base
 
 ## Fichiers principaux
 
 - `index.php` : page d'accueil
 - `ajouter-arbre.php` : page contenant le formulaire
+- `visualiser-arbres.php` : page contenant le tableau des arbres
 - `api/options.php` : retourne les choix du formulaire en JSON
 - `api/ajouter_arbre.php` : recoit les donnees du formulaire en JSON
+- `api/arbres.php` : retourne les arbres de la base en JSON
 - `inc/data_utils.php` : fonctions PHP simples pour lire le CSV, valider et sauvegarder
 
 ## Charte graphique proposee
@@ -60,6 +63,13 @@ php -S localhost:8000 -t "Projet Web"
 Puis ouvrir :
 
 - `http://localhost:8000`
+
+## Configuration MySQL utilisee
+
+- base : `patrimoine_arbore`
+- utilisateur : `root`
+- mot de passe : `root`
+- table utilisee pour les nouveaux arbres : `added_trees`
 
 ## Remarque sur les donnees
 

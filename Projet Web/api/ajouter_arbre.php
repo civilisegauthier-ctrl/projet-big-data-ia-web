@@ -36,10 +36,17 @@ $tree = array(
     'deracinement' => null,
 );
 
-$savedTree = save_added_tree($tree);
+try {
+    $savedTree = save_added_tree($tree);
+} catch (PDOException $exception) {
+    send_json(array(
+        'success' => false,
+        'message' => 'Erreur lors de l enregistrement dans la base de donnees.',
+    ), 500);
+}
 
 send_json(array(
     'success' => true,
-    'message' => 'L arbre a bien ete ajoute dans le stockage temporaire.',
+    'message' => 'L arbre a bien ete ajoute dans la base de donnees.',
     'tree' => $savedTree,
 ));

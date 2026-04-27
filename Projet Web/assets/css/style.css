@@ -129,11 +129,58 @@ img {
 }
 
 .card,
-.form-card {
+.form-card,
+.table-card {
     background-color: rgba(255, 255, 255, 0.92);
     border-radius: 22px;
     padding: 24px;
     box-shadow: var(--shadow);
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.table-header h3,
+.table-header p {
+    margin: 0;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #d8e5d6;
+    border-radius: 16px;
+}
+
+.tree-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 980px;
+    background-color: var(--white);
+}
+
+.tree-table thead {
+    background-color: #edf5ea;
+}
+
+.tree-table th,
+.tree-table td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e3ece1;
+    font-size: 0.95rem;
+}
+
+.tree-table th {
+    color: var(--green-dark);
+}
+
+.tree-table tbody tr:nth-child(even) {
+    background-color: #fbfdf9;
 }
 
 .page-intro {
