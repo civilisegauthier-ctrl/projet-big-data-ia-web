@@ -109,7 +109,7 @@ CREATE TABLE position (
 
 ALTER TABLE arbre
   ADD CONSTRAINT arbre_id_espece_FK FOREIGN KEY (id_espece)
-  REFERENCES espèce (id_espece);
+  REFERENCES espece (id_espece);
 
 ALTER TABLE arbre
   ADD CONSTRAINT arbre_id_position_FK FOREIGN KEY (id_position)

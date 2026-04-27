@@ -1,5 +1,26 @@
 <?php
 
+function get_db_connection() {
+    $host = 'localhost';
+    $db = 'patrimoine_arbore';
+    $user = 'root';
+    $pass = 'root';
+    $charset = 'utf8mb4';
+
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
+
+    try {
+        return new PDO($dsn, $user, $pass, $options);
+    } catch (PDOException $e) {
+        throw new PDOException($e->getMessage(), (int)$e->getCode());
+    }
+}
+
 function get_csv_path()
 {
     return dirname(__DIR__, 2) . '/Données_V4.csv';
@@ -89,39 +110,30 @@ function get_storage_path()
 
 function read_added_trees()
 {
-    $storagePath = get_storage_path();
-
-    if (!file_exists($storagePath)) {
-        return array();
-    }
-
-    $content = file_get_contents($storagePath);
-
-    if ($content === false || trim($content) === '') {
-        return array();
-    }
-
-    $data = json_decode($content, true);
-
-    if (!is_array($data)) {
-        return array();
-    }
-
-    return $data;
+    $pdo = get_db_connection();
+    $stmt = $pdo->query("SELECT * FROM added_trees ORDER BY date_ajout DESC");
+    return $stmt->fetchAll();
 }
 
 function save_added_tree($treeData)
 {
-    $trees = read_added_trees();
-    $treeData['id'] = count($trees) + 1;
+    $pdo = get_db_connection();
+    $stmt = $pdo->prepare("INSERT INTO added_trees (espece, hauteur_totale, hauteur_tronc, diametre_tronc, remarquable, latitude, longitude, etat, stade_developpement, type_port, type_pied, date_ajout) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+    $stmt->execute([
+        $treeData['espece'],
+        $treeData['hauteur_totale'],
+        $treeData['hauteur_tronc'],
+        $treeData['diametre_tronc'],
+        $treeData['remarquable'],
+        $treeData['latitude'],
+        $treeData['longitude'],
+        $treeData['etat'],
+        $treeData['stade_developpement'],
+        $treeData['type_port'],
+        $treeData['type_pied']
+    ]);
+    $treeData['id'] = $pdo->lastInsertId();
     $treeData['date_ajout'] = date('Y-m-d H:i:s');
-    $trees[] = $treeData;
-
-    file_put_contents(
-        get_storage_path(),
-        json_encode($trees, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-    );
-
     return $treeData;
 }
 
