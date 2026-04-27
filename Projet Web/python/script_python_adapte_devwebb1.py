@@ -15,10 +15,7 @@ from plotly import data
 import plotly.express as px
 import plotly.graph_objects as go
 
-from google.colab import drive
-drive.mount('/content/drive')
-
-dataset = pd.read_csv('/content/drive/MyDrive/TP_IA/dataset_ajuste.csv')
+dataset = pd.read_csv('dataset_ajuste.csv')
 
 print(dataset.head())
 print(dataset.info())
