@@ -118,8 +118,8 @@ elif choix_init=="2":
   if choix_nb_cluster =="2":
     map_x2 = dataset.merge(dataset[['cluster_taille2']], left_index=True, right_index=True, how='left')
     fig = px.scatter_map(dataset, lat='latitude', lon='longitude', color = 'cluster_taille2', hover_data=['remarquable','haut_tot','nomfrancais','fk_pied','clc_quartier','clc_secteur','haut_tronc','tronc_diam','fk_stadedev','fk_port','fk_revetement','feuillage','fk_situation'], zoom=12)
-    fig.show()
+    fig.write_html("map.html")  
   elif choix_nb_cluster =="3":
     map_x3 = dataset.merge(dataset[['cluster_taille3']], left_index=True, right_index=True, how='left')
     fig = px.scatter_map(dataset, lat='latitude', lon='longitude', color = 'cluster_taille3', hover_data=['remarquable','haut_tot','nomfrancais','fk_pied','clc_quartier','clc_secteur','haut_tronc','tronc_diam','fk_stadedev','fk_port','fk_revetement','feuillage','fk_situation'], zoom=12)
-    fig.show()
+    fig.write_html("map.html")  
