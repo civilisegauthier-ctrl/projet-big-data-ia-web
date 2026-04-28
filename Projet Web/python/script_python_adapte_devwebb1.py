@@ -29,7 +29,6 @@ def apply_marker_style(fig):
     fig.update_traces(
         below='',
         marker=dict(
-            size=16,
             opacity=0.95
         )
     )
