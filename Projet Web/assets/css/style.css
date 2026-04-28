@@ -145,6 +145,24 @@ img {
     margin-bottom: 24px;
 }
 
+.prediction-card {
+    margin-bottom: 24px;
+}
+
+.toggle-panel {
+    margin-bottom: 24px;
+}
+
+.prediction-form {
+    margin-top: 8px;
+}
+
+.prediction-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
 .action-buttons {
     display: flex;
     gap: 16px;
@@ -162,6 +180,14 @@ img {
 
 .hidden-section {
     display: none;
+}
+
+.placeholder-box {
+    background-color: #f4f8f2;
+    border: 1px solid #d8e5d6;
+    border-radius: 16px;
+    padding: 18px;
+    line-height: 1.6;
 }
 
 .table-header {
@@ -315,7 +341,8 @@ img {
 @media (max-width: 900px) {
     .hero-content,
     .cards,
-    .form-grid {
+    .form-grid,
+    .prediction-fields {
         grid-template-columns: 1fr;
     }
 

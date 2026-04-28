@@ -64,6 +64,43 @@ function showMapMessage(text, type) {
     box.className = 'message-box ' + type;
 }
 
+function showPredictionMessage(text, type) {
+    var box = document.getElementById('prediction-message');
+
+    if (!box) {
+        return;
+    }
+
+    box.textContent = text;
+    box.className = 'message-box ' + type;
+}
+
+function closeAllPanels() {
+    var panels = document.querySelectorAll('.toggle-panel');
+
+    panels.forEach(function (panel) {
+        panel.classList.add('hidden-section');
+    });
+}
+
+function togglePanel(panelId) {
+    var panel = document.getElementById(panelId);
+
+    if (!panel) {
+        return false;
+    }
+
+    var shouldOpen = panel.classList.contains('hidden-section');
+    closeAllPanels();
+
+    if (shouldOpen) {
+        panel.classList.remove('hidden-section');
+        return true;
+    }
+
+    return false;
+}
+
 function loadOptions() {
     fetch('api/options.php')
         .then(function (response) {
@@ -213,7 +250,7 @@ function loadTrees() {
 }
 
 function loadMap() {
-    var button = document.getElementById('show-map-button');
+    var button = document.getElementById('toggle-map-button');
     var mapCard = document.getElementById('map-card');
     var frame = document.getElementById('tree-map-frame');
     var clusterSelect = document.getElementById('map-clusters');
@@ -223,7 +260,6 @@ function loadMap() {
     }
 
     showMapMessage('Chargement de la carte...', 'success');
-    mapCard.classList.remove('hidden-section');
     if (frame.dataset.blobUrl) {
         URL.revokeObjectURL(frame.dataset.blobUrl);
         frame.dataset.blobUrl = '';
@@ -271,20 +307,88 @@ function loadMap() {
         });
 }
 
+function registerSizePrediction() {
+    var form = document.getElementById('size-prediction-form');
+
+    if (!form) {
+        return;
+    }
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(form);
+        var payload = {
+            hauteur: formData.get('hauteur'),
+            clusters: formData.get('clusters')
+        };
+
+        showPredictionMessage('Prediction en cours...', 'success');
+
+        fetch('api/prediction_taille.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                if (!data.success) {
+                    showPredictionMessage(data.message || 'Impossible de calculer la prediction.', 'error');
+                    return;
+                }
+
+                showPredictionMessage(data.prediction, 'success');
+            })
+            .catch(function () {
+                showPredictionMessage('Une erreur est survenue pendant la prediction.', 'error');
+            });
+    });
+}
+
 function registerVisualisationActions() {
-    var predictButton = document.getElementById('predict-age-button');
-    var mapButton = document.getElementById('show-map-button');
+    var ageButton = document.getElementById('toggle-age-button');
+    var sizeButton = document.getElementById('toggle-size-button');
+    var mapButton = document.getElementById('toggle-map-button');
     var clusterSelect = document.getElementById('map-clusters');
 
-    if (predictButton) {
-        predictButton.addEventListener('click', function () {
-            showActionMessage('La prediction de l age sera ajoutee dans une prochaine fonctionnalite.', 'success');
+    if (ageButton) {
+        ageButton.addEventListener('click', function () {
+            var isOpen = togglePanel('age-card');
+
+            if (isOpen) {
+                showActionMessage('Le panneau de prediction de l age est ouvert.', 'success');
+            } else {
+                showActionMessage('Le panneau de prediction de l age est referme.', 'success');
+            }
+        });
+    }
+
+    if (sizeButton) {
+        sizeButton.addEventListener('click', function () {
+            var isOpen = togglePanel('size-card');
+
+            if (isOpen) {
+                showActionMessage('Le panneau de prediction de taille est ouvert.', 'success');
+            } else {
+                showActionMessage('Le panneau de prediction de taille est referme.', 'success');
+            }
         });
     }
 
     if (mapButton) {
         mapButton.addEventListener('click', function () {
-            loadMap();
+            var isOpen = togglePanel('map-card');
+
+            if (isOpen) {
+                showActionMessage('Le panneau de carte est ouvert.', 'success');
+                loadMap();
+            } else {
+                showActionMessage('Le panneau de carte est referme.', 'success');
+            }
         });
     }
 
@@ -303,5 +407,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadOptions();
     registerForm();
     loadTrees();
+    closeAllPanels();
     registerVisualisationActions();
+    registerSizePrediction();
 });

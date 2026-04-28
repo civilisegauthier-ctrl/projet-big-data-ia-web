@@ -37,13 +37,55 @@ $currentPage = 'visualisation';
 
             <div class="action-card">
                 <div class="action-buttons">
-                    <button type="button" id="predict-age-button" class="button secondary-button">Predire l age de l arbre</button>
-                    <button type="button" id="show-map-button" class="button">Afficher la carte</button>
+                    <button type="button" id="toggle-age-button" class="button secondary-button">Predire l age de l arbre</button>
+                    <button type="button" id="toggle-size-button" class="button secondary-button">Predire la taille de l arbre</button>
+                    <button type="button" id="toggle-map-button" class="button">Afficher la carte</button>
                 </div>
                 <div id="action-message" class="message-box" aria-live="polite"></div>
             </div>
 
-            <div id="map-card" class="table-card hidden-section">
+            <div id="age-card" class="table-card toggle-panel hidden-section">
+                <div class="table-header">
+                    <h3>Prediction de l age</h3>
+                    <p>Fonctionnalite a implementer plus tard</p>
+                </div>
+
+                <div class="placeholder-box">
+                    <p>Cette zone est reservee a la future prediction de l age de l arbre.</p>
+                </div>
+            </div>
+
+            <div id="size-card" class="table-card prediction-card toggle-panel hidden-section">
+                <div class="table-header">
+                    <h3>Prediction de taille</h3>
+                    <p>Traitement Python via AJAX</p>
+                </div>
+
+                <form id="size-prediction-form" class="prediction-form">
+                    <div class="prediction-fields">
+                        <div class="form-group">
+                            <label for="prediction-height">Hauteur de l arbre (m)</label>
+                            <input type="number" id="prediction-height" name="hauteur" min="0" step="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prediction-clusters">Nombre de categories</label>
+                            <select id="prediction-clusters" name="clusters" required>
+                                <option value="2">2 categories</option>
+                                <option value="3">3 categories</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="button">Predire la taille</button>
+                    </div>
+                </form>
+
+                <div id="prediction-message" class="message-box" aria-live="polite"></div>
+            </div>
+
+            <div id="map-card" class="table-card toggle-panel hidden-section">
                 <div class="table-header">
                     <h3>Carte des arbres</h3>
                     <p>Visualisation generee par Python</p>

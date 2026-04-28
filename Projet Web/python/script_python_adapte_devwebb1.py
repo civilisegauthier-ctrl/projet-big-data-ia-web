@@ -35,6 +35,45 @@ def apply_marker_style(fig):
     return fig
 
 
+def predict_tree_size(cluster_count, tree_height):
+    trouve = False
+
+    for i in range(len(dataset)):
+        if dataset.loc[i, 'haut_tot'] == tree_height:
+            trouve = True
+
+            if cluster_count == "3":
+                if dataset.loc[i, 'cluster_taille3'] == "petit":
+                    return "Cet arbre est petit."
+                elif dataset.loc[i, 'cluster_taille3'] == "moyen":
+                    return "Cet arbre est moyen."
+                elif dataset.loc[i, 'cluster_taille3'] == "grand":
+                    return "Cet arbre est grand."
+
+            elif cluster_count == "2":
+                if dataset.loc[i, 'cluster_taille2'] == "petit":
+                    return "Cet arbre est petit."
+                elif dataset.loc[i, 'cluster_taille2'] == "grand":
+                    return "Cet arbre est grand."
+
+    if not trouve:
+        if cluster_count == "3":
+            if tree_height > 18:
+                return "Ce nouvel arbre est grand."
+            elif tree_height < 11:
+                return "Cet arbre est petit."
+            else:
+                return "Ce nouvel arbre est moyen."
+
+        elif cluster_count == "2":
+            if tree_height > 11:
+                return "Ce nouvel arbre est grand."
+            else:
+                return "Ce nouvel arbre est petit."
+
+    return "Prediction impossible."
+
+
 ############ interaction avec l'utilisateur ##############
 
 #on initialise une variable qui va retenir le choix du client entre voir à quelle catégorie appartient un arbre ou voir la carte
@@ -50,66 +89,10 @@ while choix_init != "1" and choix_init != "2":
   
 #on demande au client s'il préfère avoir 2 catégories ou 3
 if choix_init == "1":
-  #choix_nb_cluster = input("Combien de catégories souhaitez-vous?,\n choix possible : 2 ou 3")
   choix_nb_cluster = sys.argv[2]
-
-  #si le choix n'est pas dans les options on demande au client de mettre un choix valide jusqu'à ce qu'il le fasse
-  """
-  while choix_nb_cluster != "2" and choix_nb_cluster != "3":
-    print("choix non valide. Choix possibles : 2 et 3 ")
-    choix_nb_cluster = input("Combien de cluster voulez-vous ?\n choix possible : 2 ou 3")
-"""
-  #on demande au client quelle est la taille qu'il souhaite catégoriser pour savoir à quel catégorie appartient un arbre de x mètre
-  #choix_taille = input("Quel taille d'arbre souhaitez-vous catégoriser ?\n entrez un entier naturel.")
-  #choix_taille_num = float(choix_taille)
-
   choix_taille = sys.argv[3]
-  choix_taille_num = int(choix_taille)
-
-
-  #on initialise une variable pour savoir pendant la boucle si on trouve la taille de l'arbre
-
-  trouve = False
-
-  #on fait une boucle qui parcourt le tableau et compare pour savoir si un arbre fait la taille demandée et sa catégorie
-
-  for i in range(len(dataset)):
-
-    if dataset.loc[i, 'haut_tot'] == choix_taille_num:
-        trouve = True
-        if choix_nb_cluster == "3":
-          if dataset.loc[i, 'cluster_taille3'] == "petit":
-            print("cet arbre est petit")
-            break
-          elif dataset.loc[i, 'cluster_taille3'] == "moyen":
-            print("cet arbre est moyen")
-            break
-          elif dataset.loc[i, 'cluster_taille3'] == "grand":
-            print("cet arbre est grand")
-            break
-        elif choix_nb_cluster == "2":
-          if dataset.loc[i, 'cluster_taille2'] == "petit":
-            print("cet arbre est petit")
-            break
-
-          elif dataset.loc[i, 'cluster_taille2'] == "grand":
-            print("cet arbre est grand")
-            break
-
-  if not trouve:
-    if choix_nb_cluster == "3":
-      if choix_taille_num > 18:
-        print("ce nouvel arbre est grand")
-      if choix_taille_num < 11:
-        print("cet arbre est petit")
-      else:
-        print("ce nouvel arbre est moyen")
-
-    elif choix_nb_cluster == "2":
-      if choix_taille_num > 11:
-        print("ce nouvel arbre est grand")
-      else:
-        print("ce nouvel arbre est petit")
+  choix_taille_num = int(float(choix_taille))
+  print(predict_tree_size(choix_nb_cluster, choix_taille_num))
 #on créer la carte intéractive en fonction du nombre de catégorie demandée
 
 elif choix_init=="2":
