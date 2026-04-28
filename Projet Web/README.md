@@ -10,7 +10,9 @@ Cette proposition fournit une premiere version simple du site web pour le projet
 - Une page `Voir les arbres`
 - Un formulaire qui demande uniquement les champs attendus
 - Un chargement des listes depuis `Données_V4.csv`
+- Deux boutons sur la page de visualisation : prediction d age et affichage de la carte
 - Un tableau qui affiche les arbres presents dans la base web
+- Une carte generee par Python et chargee en AJAX via PHP
 - Des echanges AJAX entre le front-end et le back-end
 - Des reponses JSON cote PHP
 
@@ -30,7 +32,9 @@ Le fonctionnement retenu pour rester simple est le suivant :
 - `api/options.php` : retourne les choix du formulaire en JSON
 - `api/ajouter_arbre.php` : recoit les donnees du formulaire en JSON
 - `api/arbres.php` : retourne les arbres de la base en JSON
+- `api/carte.php` : lance Python et retourne le HTML de la carte en JSON
 - `inc/data_utils.php` : fonctions PHP simples pour lire le CSV, valider et sauvegarder
+- `python/script_python_adapte_devwebb1.py` : script Python utilise pour la carte
 
 ## Charte graphique proposee
 

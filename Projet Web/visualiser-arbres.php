@@ -35,6 +35,34 @@ $currentPage = 'visualisation';
                 </p>
             </div>
 
+            <div class="action-card">
+                <div class="action-buttons">
+                    <button type="button" id="predict-age-button" class="button secondary-button">Predire l age de l arbre</button>
+                    <button type="button" id="show-map-button" class="button">Afficher la carte</button>
+                </div>
+                <div id="action-message" class="message-box" aria-live="polite"></div>
+            </div>
+
+            <div id="map-card" class="table-card hidden-section">
+                <div class="table-header">
+                    <h3>Carte des arbres</h3>
+                    <p>Visualisation generee par Python</p>
+                </div>
+
+                <div class="map-controls">
+                    <label for="map-clusters">Nombre de categories</label>
+                    <select id="map-clusters">
+                        <option value="2">2 categories</option>
+                        <option value="3">3 categories</option>
+                    </select>
+                </div>
+
+                <div id="map-message" class="message-box" aria-live="polite"></div>
+                <div class="map-frame-wrapper">
+                    <iframe id="tree-map-frame" title="Carte des arbres"></iframe>
+                </div>
+            </div>
+
             <div class="table-card">
                 <div class="table-header">
                     <h3>Liste des arbres</h3>

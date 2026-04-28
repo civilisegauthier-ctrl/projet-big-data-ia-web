@@ -1,31 +1,39 @@
-
 ########## import des bibliothèques et lecture du dataset ###########
 
-from pyproj import CRS, Transformer
-import pandas as pd
-from plotly import data
-import plotly.express as px
+from pathlib import Path
 import sys
 
+import pandas as pd
+import plotly.express as px
+from pyproj import CRS, Transformer
 
 
-dataset = pd.read_csv('dataset_ajuste.csv')
+BASE_DIR = Path(__file__).resolve().parent
+DATASET_PATH = BASE_DIR / 'dataset_ajuste.csv'
 
+dataset = pd.read_csv(DATASET_PATH)
 
-############# conversion des coordonnées référence spatial en coordonnées latitude et longitude #############
-
-#crs 3949 trouvé lors de recherche sur le dataset, mesure prise par rapport à cette référence
-#crs 4326 est la référence internationale pour les latitudes et longitudes GPS
 crs_3949 = CRS('EPSG:3949')
 crs_latlon = CRS('EPSG:4326')
-
-#on convertie les valeurs du dataset X et Y en coordonnées GPS
 transformer = Transformer.from_crs(crs_3949, crs_latlon, always_xy=True)
 longitudes, latitudes = transformer.transform(dataset['X'].values, dataset['Y'].values)
 
-#on attribue au nouvelles lignes les nouvelles coordonnées
 dataset['longitude'] = longitudes
 dataset['latitude'] = latitudes
+
+center_latitude = float(dataset['latitude'].mean())
+center_longitude = float(dataset['longitude'].mean())
+
+
+def apply_marker_style(fig):
+    fig.update_traces(
+        below='',
+        marker=dict(
+            size=16,
+            opacity=0.95
+        )
+    )
+    return fig
 
 
 ############ interaction avec l'utilisateur ##############
@@ -114,11 +122,40 @@ elif choix_init=="2":
     """
   choix_nb_cluster = sys.argv[2]
   if choix_nb_cluster =="2":
-    map_x2 = dataset.merge(dataset[['cluster_taille2']], left_index=True, right_index=True, how='left')
-    fig = px.scatter_map(dataset, lat='latitude', lon='longitude', color = 'cluster_taille2', hover_data=['remarquable'], zoom=12)
-    print(fig.to_html(full_html=False)
-          )
+    fig = px.scatter_map(
+        dataset,
+        lat='latitude',
+        lon='longitude',
+        color='cluster_taille2',
+        hover_data=['nomfrancais', 'haut_tot', 'remarquable'],
+        zoom=12
+    )
+    fig = apply_marker_style(fig)
+    fig.update_layout(
+        map_style='open-street-map',
+        map=dict(
+            center=dict(lat=center_latitude, lon=center_longitude),
+            zoom=12
+        ),
+        margin=dict(l=0, r=0, t=0, b=0)
+    )
+    print(fig.to_html(full_html=False, include_plotlyjs='cdn'))
   elif choix_nb_cluster =="3":
-    map_x3 = dataset.merge(dataset[['cluster_taille3']], left_index=True, right_index=True, how='left')
-    fig = px.scatter_map(dataset, lat='latitude', lon='longitude', color = 'cluster_taille3', hover_data=['remarquable'], zoom=12)
-    print(fig.to_html(full_html=False))
+    fig = px.scatter_map(
+        dataset,
+        lat='latitude',
+        lon='longitude',
+        color='cluster_taille3',
+        hover_data=['nomfrancais', 'haut_tot', 'remarquable'],
+        zoom=12
+    )
+    fig = apply_marker_style(fig)
+    fig.update_layout(
+        map_style='open-street-map',
+        map=dict(
+            center=dict(lat=center_latitude, lon=center_longitude),
+            zoom=12
+        ),
+        margin=dict(l=0, r=0, t=0, b=0)
+    )
+    print(fig.to_html(full_html=False, include_plotlyjs='cdn'))

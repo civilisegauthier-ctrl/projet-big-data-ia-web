@@ -42,6 +42,28 @@ function showTableMessage(text, type) {
     box.className = 'message-box ' + type;
 }
 
+function showActionMessage(text, type) {
+    var box = document.getElementById('action-message');
+
+    if (!box) {
+        return;
+    }
+
+    box.textContent = text;
+    box.className = 'message-box ' + type;
+}
+
+function showMapMessage(text, type) {
+    var box = document.getElementById('map-message');
+
+    if (!box) {
+        return;
+    }
+
+    box.textContent = text;
+    box.className = 'message-box ' + type;
+}
+
 function loadOptions() {
     fetch('api/options.php')
         .then(function (response) {
@@ -190,8 +212,68 @@ function loadTrees() {
         });
 }
 
+function loadMap() {
+    var button = document.getElementById('show-map-button');
+    var mapCard = document.getElementById('map-card');
+    var frame = document.getElementById('tree-map-frame');
+    var clusterSelect = document.getElementById('map-clusters');
+
+    if (!button || !mapCard || !frame || !clusterSelect) {
+        return;
+    }
+
+    showMapMessage('Chargement de la carte...', 'success');
+
+    fetch('api/carte.php?clusters=' + encodeURIComponent(clusterSelect.value))
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            if (!data.success) {
+                showMapMessage(data.message || 'Impossible de charger la carte.', 'error');
+                return;
+            }
+
+            mapCard.classList.remove('hidden-section');
+            frame.srcdoc = data.map_html;
+            showMapMessage('Carte chargee avec succes.', 'success');
+        })
+        .catch(function () {
+            showMapMessage('Une erreur est survenue pendant le chargement de la carte.', 'error');
+        });
+}
+
+function registerVisualisationActions() {
+    var predictButton = document.getElementById('predict-age-button');
+    var mapButton = document.getElementById('show-map-button');
+    var clusterSelect = document.getElementById('map-clusters');
+
+    if (predictButton) {
+        predictButton.addEventListener('click', function () {
+            showActionMessage('La prediction de l age sera ajoutee dans une prochaine fonctionnalite.', 'success');
+        });
+    }
+
+    if (mapButton) {
+        mapButton.addEventListener('click', function () {
+            loadMap();
+        });
+    }
+
+    if (clusterSelect) {
+        clusterSelect.addEventListener('change', function () {
+            var mapCard = document.getElementById('map-card');
+
+            if (mapCard && !mapCard.classList.contains('hidden-section')) {
+                loadMap();
+            }
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     loadOptions();
     registerForm();
     loadTrees();
+    registerVisualisationActions();
 });
