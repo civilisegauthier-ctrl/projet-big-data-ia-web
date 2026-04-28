@@ -130,7 +130,6 @@ elif choix_init=="2":
         hover_data=['nomfrancais', 'haut_tot', 'remarquable'],
         zoom=12
     )
-    fig = apply_marker_style(fig)
     fig.update_layout(
         map_style='open-street-map',
         map=dict(
@@ -139,7 +138,8 @@ elif choix_init=="2":
         ),
         margin=dict(l=0, r=0, t=0, b=0)
     )
-    print(fig.to_html(full_html=False, include_plotlyjs='cdn'))
+    fig = apply_marker_style(fig)
+    print(fig.to_html(full_html=True, include_plotlyjs='cdn'))
   elif choix_nb_cluster =="3":
     fig = px.scatter_map(
         dataset,
@@ -149,7 +149,6 @@ elif choix_init=="2":
         hover_data=['nomfrancais', 'haut_tot', 'remarquable'],
         zoom=12
     )
-    fig = apply_marker_style(fig)
     fig.update_layout(
         map_style='open-street-map',
         map=dict(
@@ -158,4 +157,5 @@ elif choix_init=="2":
         ),
         margin=dict(l=0, r=0, t=0, b=0)
     )
-    print(fig.to_html(full_html=False, include_plotlyjs='cdn'))
+    fig = apply_marker_style(fig)
+    print(fig.to_html(full_html=True, include_plotlyjs='cdn'))

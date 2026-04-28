@@ -43,7 +43,7 @@ $currentPage = 'accueil';
                 </div>
 
                 <div class="hero-visual">
-                    <img src="assets/img/foret-urbaine.svg" alt="Illustration d'arbres en ville">
+                    <img src="assets/img/foret-urbaine.png" alt="Illustration d'arbres en ville">
                 </div>
             </div>
         </section>

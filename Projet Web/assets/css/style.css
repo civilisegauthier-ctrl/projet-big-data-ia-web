@@ -195,6 +195,7 @@ img {
     border: 1px solid #d8e5d6;
     border-radius: 16px;
     background-color: #f8fbf6;
+    position: relative;
 }
 
 #tree-map-frame {
@@ -202,6 +203,9 @@ img {
     height: 540px;
     border: none;
     display: block;
+    position: relative;
+    z-index: 0;
+    background-color: #f8fbf6;
 }
 
 .table-header h3,

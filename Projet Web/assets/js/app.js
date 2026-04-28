@@ -223,6 +223,13 @@ function loadMap() {
     }
 
     showMapMessage('Chargement de la carte...', 'success');
+    mapCard.classList.remove('hidden-section');
+    if (frame.dataset.blobUrl) {
+        URL.revokeObjectURL(frame.dataset.blobUrl);
+        frame.dataset.blobUrl = '';
+    }
+    frame.removeAttribute('srcdoc');
+    frame.src = 'about:blank';
 
     fetch('api/carte.php?clusters=' + encodeURIComponent(clusterSelect.value))
         .then(function (response) {
@@ -234,8 +241,29 @@ function loadMap() {
                 return;
             }
 
-            mapCard.classList.remove('hidden-section');
-            frame.srcdoc = data.map_html;
+            var htmlBlob = new Blob([data.map_html], { type: 'text/html' });
+            var blobUrl = URL.createObjectURL(htmlBlob);
+
+            frame.onload = function () {
+                var iframeWindow = frame.contentWindow;
+
+                if (!iframeWindow || !iframeWindow.document) {
+                    return;
+                }
+
+                window.setTimeout(function () {
+                    var plotElement = iframeWindow.document.querySelector('.plotly-graph-div');
+
+                    if (iframeWindow.Plotly && plotElement) {
+                        iframeWindow.Plotly.Plots.resize(plotElement);
+                    }
+
+                    iframeWindow.dispatchEvent(new Event('resize'));
+                }, 250);
+            };
+
+            frame.dataset.blobUrl = blobUrl;
+            frame.src = blobUrl;
             showMapMessage('Carte chargee avec succes.', 'success');
         })
         .catch(function () {
